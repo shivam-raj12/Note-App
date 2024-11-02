@@ -1,5 +1,8 @@
-
-![Logo](https://github.com/shivam-raj12/Note_App/blob/master/app/src/main/ic_launcher-playstore.png)
+<p align="center">
+    <a href="https://github.com/shivam-raj12/Note-App" target="_blank" rel="noopener noreferrer">
+        <img src="https://raw.githubusercontent.com/shivam-raj12/Note-App/master/app/src/main/ic_launcher-playstore.png" alt="Your Logo">
+    </a>
+</p>
 
 # Note App
 
