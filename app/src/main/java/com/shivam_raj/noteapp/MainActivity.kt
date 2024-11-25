@@ -9,8 +9,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.ramcosta.composedestinations.DestinationsNavHost
-import com.shivam_raj.noteapp.screens.NavGraphs
+import com.shivam_raj.noteapp.navigation.NavigationGraph
 import com.shivam_raj.noteapp.ui.theme.NoteAppTheme
 
 /**
@@ -29,7 +28,7 @@ class MainActivity : ComponentActivity() {
                         .fillMaxSize(),
                     color = MaterialTheme.colorScheme.onSecondaryContainer
                 ) {
-                    DestinationsNavHost(navGraph = NavGraphs.root)
+                    NavigationGraph()
                 }
             }
         }

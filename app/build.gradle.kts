@@ -4,27 +4,16 @@ plugins {
     id("com.google.devtools.ksp") version "1.9.0-1.0.13"
 }
 
-kotlin {
-    sourceSets {
-        debug {
-            kotlin.srcDir("build/generated/ksp/debug/kotlin")
-        }
-        release {
-            kotlin.srcDir("build/generated/ksp/release/kotlin")
-        }
-    }
-}
-
 android {
     namespace = "com.shivam_raj.noteapp"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.shivam_raj.noteapp"
         minSdk = 24
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        targetSdk = 35
+        versionCode = 2
+        versionName = "1.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -87,14 +76,12 @@ dependencies {
     //View Model
     implementation(libs.androidx.lifecycle.viewmodel.compose)
 
-    //Compose destination
-    implementation(libs.animations.core)
-    ksp(libs.ksp)
-
     //Lottie Animation
     implementation(libs.lottie.compose)
 
     //Splash Screen
     implementation(libs.androidx.core.splashscreen)
 
+    //Official Navigation Library
+    implementation(libs.androidx.navigation.compose)
 }

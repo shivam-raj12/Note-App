@@ -32,13 +32,10 @@ Welcome to our user-friendly note-taking app designed for simplicity and securit
 
 
 
-
-
 ## Upcoming Updates
 
 - Online sync support (Top Priority)
 - Additional writing styles
-- Replace third-party library (Compose Destination) with the official one
 - Enhanced user experience with Animations
 - Expanded background color options
 - Performance enhancements

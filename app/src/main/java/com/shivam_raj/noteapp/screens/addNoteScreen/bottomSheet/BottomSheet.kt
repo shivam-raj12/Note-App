@@ -84,7 +84,13 @@ fun BottomSheet(
                     Icon(imageVector = Icons.Filled.Clear, contentDescription = "Close sheet")
                 }
             }
-            BottomSheetSecurityItem(onSecurityClick)
+            BottomSheetSecurityItem{
+                coroutineScope.launch {
+                    sheetState.hide()
+                    onDismissRequest()
+                    onSecurityClick()
+                }
+            }
             SetPriorityBottomSheetItem(
                 selectedPriority = selectedPriority,
                 onPriorityChanged = {
@@ -101,6 +107,10 @@ fun BottomSheet(
             FilledTonalButton(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
+                    coroutineScope.launch {
+                        sheetState.hide()
+                        onDismissRequest()
+                    }
                     onSaveClick(
                         Priority.getValueWithId(selectedPriority),
                         backgroundColor

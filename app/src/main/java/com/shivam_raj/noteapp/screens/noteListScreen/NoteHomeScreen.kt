@@ -22,14 +22,10 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.annotation.RootNavGraph
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import androidx.navigation.NavHostController
 import com.shivam_raj.noteapp.Application
 import com.shivam_raj.noteapp.database.Note
-import com.shivam_raj.noteapp.screens.destinations.AddNoteScreenDestination
-import com.shivam_raj.noteapp.screens.destinations.DetailNoteScreenDestination
-import com.shivam_raj.noteapp.screens.destinations.PasswordScreenDestination
+import com.shivam_raj.noteapp.navigation.Screens
 import com.shivam_raj.noteapp.screens.noteListScreen.utils.ActionModeIconsList
 import com.shivam_raj.noteapp.screens.noteListScreen.utils.DeleteConfirmationDialog
 import com.shivam_raj.noteapp.screens.noteListScreen.utils.EmptyNoteList
@@ -61,8 +57,6 @@ import com.shivam_raj.noteapp.screens.noteListScreen.viewModel.NoteListScreenVie
  * @see NoteListScreenViewModel
  */
 @Composable
-@Destination
-@RootNavGraph(start = true)
 fun NoteHomeScreen(
     noteListScreenViewModel: NoteListScreenViewModel = viewModel(
         factory = viewModelFactory {
@@ -71,7 +65,8 @@ fun NoteHomeScreen(
             }
         }
     ),
-    navigator: DestinationsNavigator
+    navigator: NavHostController,
+    onNoteClick:(Note)->Unit
 ) {
     BackHandler(
         enabled = noteListScreenViewModel.isSelectionModeActive
@@ -79,7 +74,7 @@ fun NoteHomeScreen(
         noteListScreenViewModel.reverseSelectionMode()
     }
 
-    val navigateToAddNoteScreen: () -> Unit = { navigator.navigate(AddNoteScreenDestination()) }
+    val navigateToAddNoteScreen: () -> Unit = { navigator.navigate(Screens.AddNoteScreen.route) }
 
     /**
      * Fetching all the saved notes and applying search field filter.
@@ -170,13 +165,14 @@ fun NoteHomeScreen(
                         onNoteLongClick = noteListScreenViewModel::onNoteLongClick,
                         onNoteClick = { note ->
                             if (!noteListScreenViewModel.isSelectionModeActive) {
+                                onNoteClick(note)
                                 if (note.password == null) {
                                     navigator.navigate(
-                                        DetailNoteScreenDestination(note = note)
+                                        Screens.DetailScreen.route
                                     )
                                 } else {
                                     navigator.navigate(
-                                        PasswordScreenDestination(note = note)
+                                        Screens.PasswordScreen.route
                                     )
                                 }
                             } else {

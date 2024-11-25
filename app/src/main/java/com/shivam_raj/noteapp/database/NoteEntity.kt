@@ -30,3 +30,11 @@ data class Note(
     }
 
 }
+
+val EmptyNote = Note(
+    noteTitle = "Oops! Something unexpected happens:(",
+    noteDescription = "We apologize for the inconvenience, but something unexpected occurred while displaying the note.\n\nWe recommend closing the screen (pressing the back button) and reopening the note.",
+    notePriority = 0,
+    dateAdded = System.currentTimeMillis(),
+    lastUpdate = System.currentTimeMillis()
+)

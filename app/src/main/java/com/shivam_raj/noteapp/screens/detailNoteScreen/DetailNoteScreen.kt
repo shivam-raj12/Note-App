@@ -39,14 +39,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import androidx.navigation.NavHostController
 import com.shivam_raj.noteapp.R
 import com.shivam_raj.noteapp.database.Note
 import com.shivam_raj.noteapp.database.Priority
 import com.shivam_raj.noteapp.getSimpleFormattedDate
-import com.shivam_raj.noteapp.screens.destinations.AddNoteScreenDestination
-import com.shivam_raj.noteapp.screens.destinations.NoteHomeScreenDestination
+import com.shivam_raj.noteapp.navigation.Screens
 import com.shivam_raj.noteapp.ui.theme.colorProviderForNoteBackground
 
 /**
@@ -57,9 +55,8 @@ import com.shivam_raj.noteapp.ui.theme.colorProviderForNoteBackground
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-@Destination
 fun DetailNoteScreen(
-    navigator: DestinationsNavigator,
+    navigator: NavHostController,
     note: Note
 ) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
@@ -119,8 +116,8 @@ fun DetailNoteScreen(
                         )
                     }
                     IconButton(onClick = {
-                        navigator.navigate(AddNoteScreenDestination(note = note)) {
-                            popUpTo(NoteHomeScreenDestination.route)
+                        navigator.navigate(Screens.AddNoteScreen.route) {
+                            popUpTo(Screens.HomeScreen.route)
                         }
                     }) {
                         Icon(imageVector = Icons.Filled.Edit, contentDescription = "Edit note")

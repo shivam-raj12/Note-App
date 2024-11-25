@@ -29,22 +29,18 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import com.ramcosta.composedestinations.result.NavResult
-import com.ramcosta.composedestinations.result.ResultRecipient
+import androidx.navigation.NavHostController
 import com.shivam_raj.noteapp.database.Note
 import com.shivam_raj.noteapp.database.Priority
+import com.shivam_raj.noteapp.navigation.Screens
 import com.shivam_raj.noteapp.screens.addNoteScreen.viewModel.AddNoteScreenViewModel
-import com.shivam_raj.noteapp.screens.destinations.SetPasswordScreenDestination
 import com.shivam_raj.noteapp.screens.noteListScreen.noteRepo
-import com.shivam_raj.noteapp.screens.setPasswordScreen.SecurityData
+import com.shivam_raj.noteapp.screens.noteSecurityScreen.SecurityData
 
-@Destination
 @Composable
 fun AddNoteScreen(
-    navigator: DestinationsNavigator,
-    resultRecipient: ResultRecipient<SetPasswordScreenDestination, SecurityData>,
+    navigator: NavHostController,
+    securityData: SecurityData,
     note: Note? = null
 ) {
     val addNoteScreenViewModel: AddNoteScreenViewModel = viewModel(factory = viewModelFactory {
@@ -52,14 +48,9 @@ fun AddNoteScreen(
             AddNoteScreenViewModel(noteRepo().noteRepository, note)
         }
     })
+    addNoteScreenViewModel.securityData = securityData
     val focusManager = LocalFocusManager.current
 
-    resultRecipient.onNavResult {
-        when (it) {
-            NavResult.Canceled -> {}
-            is NavResult.Value -> addNoteScreenViewModel.setSecurityData(it.value)
-        }
-    }
     val topBarButtonEnabled by remember {
         derivedStateOf {
             (addNoteScreenViewModel.title.value.isNotEmpty() && addNoteScreenViewModel.description.value.isNotEmpty())
@@ -76,9 +67,7 @@ fun AddNoteScreen(
                 isNewNote = note == null,
                 onSecurityClick = {
                     navigator.navigate(
-                        SetPasswordScreenDestination(
-                            defaultSecurityData = addNoteScreenViewModel.securityData.value,
-                        )
+                        Screens.SecurityScreen.route
                     )
                 },
                 onBackArrowClick = {
@@ -120,9 +109,9 @@ fun AddNoteScreen(
                 },
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.Sentences,
-                    imeAction = ImeAction.Next,
+                    autoCorrectEnabled = true,
                     keyboardType = KeyboardType.Text,
-                    autoCorrect = true
+                    imeAction = ImeAction.Next
                 ),
                 keyboardActions = KeyboardActions(
                     onNext = {
@@ -142,8 +131,8 @@ fun AddNoteScreen(
                 textStyle = MaterialTheme.typography.bodyLarge,
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.Sentences,
-                    keyboardType = KeyboardType.Text,
-                    autoCorrect = true
+                    autoCorrectEnabled = true,
+                    keyboardType = KeyboardType.Text
                 ),
             )
         }

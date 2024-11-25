@@ -43,14 +43,11 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import androidx.navigation.NavHostController
 import com.shivam_raj.noteapp.R
 import com.shivam_raj.noteapp.ShakeConfig
-import com.shivam_raj.noteapp.database.Note
+import com.shivam_raj.noteapp.navigation.Screens
 import com.shivam_raj.noteapp.rememberShakeController
-import com.shivam_raj.noteapp.screens.destinations.DetailNoteScreenDestination
-import com.shivam_raj.noteapp.screens.destinations.NoteHomeScreenDestination
 import com.shivam_raj.noteapp.shake
 
 /**
@@ -58,12 +55,17 @@ import com.shivam_raj.noteapp.shake
  *  - If the user enters a correct password then DetailNoteScreen will be shown.
  */
 @OptIn(ExperimentalMaterial3Api::class)
-@Destination
 @Composable
 fun PasswordScreen(
-    note: Note,
-    navigator: DestinationsNavigator
+    notePassword: String?,
+    navigator: NavHostController
 ) {
+    if (notePassword.isNullOrBlank()){
+        navigator.navigate(Screens.DetailScreen.route){
+            popUpTo(Screens.PasswordScreen.route)
+        }
+    }
+
     var password by remember {
         mutableStateOf("")
     }
@@ -128,9 +130,9 @@ fun PasswordScreen(
                         imeAction = ImeAction.Done
                     ),
                     keyboardActions = KeyboardActions(onDone = {
-                        if (note.password == password) {
-                            navigator.navigate(DetailNoteScreenDestination(note)) {
-                                popUpTo(NoteHomeScreenDestination.route)
+                        if (notePassword == password) {
+                            navigator.navigate(Screens.DetailScreen.route) {
+                                popUpTo(Screens.HomeScreen.route)
                             }
                         } else {
                             shakeController.shake()
@@ -161,9 +163,9 @@ fun PasswordScreen(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Button(onClick = {
-                    if (note.password == password) {
-                        navigator.navigate(DetailNoteScreenDestination(note)) {
-                            popUpTo(NoteHomeScreenDestination.route)
+                    if (notePassword == password) {
+                        navigator.navigate(Screens.DetailScreen.route) {
+                            popUpTo(Screens.HomeScreen.route)
                         }
                     } else {
                         shakeController.shake(ShakeConfig(2, 100f))
