@@ -1,18 +1,16 @@
 package com.shivam_raj.noteapp.screens.addNoteScreen
 
-import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,6 +19,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -31,7 +30,6 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.NavHostController
 import com.shivam_raj.noteapp.database.Note
-import com.shivam_raj.noteapp.database.Priority
 import com.shivam_raj.noteapp.navigation.Screens
 import com.shivam_raj.noteapp.screens.addNoteScreen.viewModel.AddNoteScreenViewModel
 import com.shivam_raj.noteapp.screens.noteListScreen.noteRepo
@@ -62,7 +60,7 @@ fun AddNoteScreen(
             .fillMaxSize(),
         topBar = {
             TopBar(
-                priority = if (note != null) Priority.getValueWithId(note.notePriority) else null,
+                priority = note?.notePriority,
                 enabled = topBarButtonEnabled,
                 isNewNote = note == null,
                 onSecurityClick = {
@@ -71,12 +69,12 @@ fun AddNoteScreen(
                     )
                 },
                 onBackArrowClick = {
-                    navigator.popBackStack()
+                    navigator.navigateUp()
                 },
                 colorIndex = note?.colorIndex,
                 onSaveClick = { priority, colorIndex ->
                     addNoteScreenViewModel.onSaveNoteButtonClick(priority, colorIndex)
-                    navigator.popBackStack()
+                    navigator.navigateUp()
                 }
             )
         }
@@ -90,23 +88,17 @@ fun AddNoteScreen(
                 )
                 .padding(
                     horizontal = 8.dp,
-                    vertical = 5.dp
                 )
-                .verticalScroll(rememberScrollState())
-                .animateContentSize(),
-            verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             OutlinedTextField(
                 value = addNoteScreenViewModel.title.value,
-                onValueChange = { if (it.length <= 60) addNoteScreenViewModel.setTitle(it) },
+                onValueChange = { addNoteScreenViewModel.setTitle(it) },
                 modifier = Modifier.fillMaxWidth(),
                 placeholder = {
                     Text(text = "Note's Title")
                 },
                 textStyle = MaterialTheme.typography.titleLarge,
-                suffix = {
-                    Text(text = "${addNoteScreenViewModel.title.value.length}/60")
-                },
+                singleLine = true,
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.Sentences,
                     autoCorrectEnabled = true,
@@ -117,8 +109,13 @@ fun AddNoteScreen(
                     onNext = {
                         focusManager.moveFocus(FocusDirection.Down)
                     }
+                ),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = Color.Transparent,
+                    unfocusedBorderColor = Color.Transparent
                 )
             )
+            HorizontalDivider()
             OutlinedTextField(
                 value = addNoteScreenViewModel.description.value,
                 onValueChange = addNoteScreenViewModel::setDescription,
@@ -134,6 +131,10 @@ fun AddNoteScreen(
                     autoCorrectEnabled = true,
                     keyboardType = KeyboardType.Text
                 ),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = Color.Transparent,
+                    unfocusedBorderColor = Color.Transparent
+                )
             )
         }
     }

@@ -10,6 +10,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -27,8 +28,8 @@ import com.shivam_raj.noteapp.screens.addNoteScreen.TextWithIcon
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SetPriorityBottomSheetItem(
-    selectedPriority: Int,
-    onPriorityChanged: (Int) -> Unit
+    selectedPriority: Priority,
+    onPriorityChanged: (Priority) -> Unit
 ) {
     var expanded by remember {
         mutableStateOf(false)
@@ -56,9 +57,12 @@ fun SetPriorityBottomSheetItem(
             expanded = expanded,
             onExpandedChange = { expanded = it }) {
             TextWithIcon(
-                text = Priority.getValueWithId(selectedPriority).name,
+                text = selectedPriority.name,
                 modifier = Modifier
-                    .menuAnchor()
+                    .menuAnchor(
+                        type = MenuAnchorType.PrimaryNotEditable,
+                        enabled = true
+                    )
                     .width(100.dp),
                 expanded = expanded
             )
@@ -68,7 +72,7 @@ fun SetPriorityBottomSheetItem(
                 Priority.entries.forEach { priority ->
                     DropdownMenuItem(
                         text = { Text(text = priority.name) },
-                        onClick = { onPriorityChanged(priority.id);expanded = false })
+                        onClick = { onPriorityChanged(priority);expanded = false })
                 }
             }
         }

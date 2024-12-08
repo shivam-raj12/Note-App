@@ -38,7 +38,7 @@ class AddNoteScreenViewModel(
         val updatedNote = note?.copy(
             noteTitle = title.value,
             noteDescription = description.value,
-            notePriority = priority.id,
+            notePriority = priority,
             fakeTitle = securityData.fakeTitle,
             fakeDescription = securityData.fakeDescription,
             password = securityData.password,
@@ -47,7 +47,7 @@ class AddNoteScreenViewModel(
         ) ?: Note(
             noteTitle = title.value,
             noteDescription = description.value,
-            notePriority = priority.id,
+            notePriority = priority,
             fakeTitle = securityData.fakeTitle,
             fakeDescription = securityData.fakeDescription,
             password = securityData.password,

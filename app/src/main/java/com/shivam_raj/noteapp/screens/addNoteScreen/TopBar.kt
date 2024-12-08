@@ -83,7 +83,7 @@ fun TopBar(
     )
     if (show) {
         BottomSheet(
-            priority = priority?.id,
+            priority = priority,
             isNewNote = isNewNote,
             onSaveClick = onSaveClick,
             onDismissRequest = { show = false },

@@ -1,23 +1,31 @@
 package com.shivam_raj.noteapp.database
 
+import androidx.room.TypeConverter
+
 enum class Priority(
     val id: Int,
 ) {
-    High(4),
-    Medium(3),
-    Low(2),
-    VeryLow(1),
-    None(0);
+    HIGH(4),
+    MEDIUM(3),
+    LOW(2),
+    VERY_LOW(1),
+    NONE(0)
+}
 
-    companion object {
-        fun getValueWithId(int: Int): Priority {
-            return when (int) {
-                4 -> High
-                3 -> Medium
-                2 -> Low
-                1 -> VeryLow
-                else -> None
-            }
+class TypeConverter{
+    @TypeConverter
+    fun fromPriority(priority: Priority): Int{
+        return priority.id
+    }
+
+    @TypeConverter
+    fun toPriority(id: Int): Priority{
+        return when(id) {
+            4 -> Priority.HIGH
+            3 -> Priority.MEDIUM
+            2 -> Priority.LOW
+            1 -> Priority.VERY_LOW
+            else -> Priority.NONE
         }
     }
 }

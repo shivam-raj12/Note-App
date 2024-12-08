@@ -101,7 +101,7 @@ fun PasswordScreen(
                         )
                     },
                     navigationIcon = {
-                        IconButton(onClick = { navigator.popBackStack() }) {
+                        IconButton(onClick = { navigator.navigateUp() }) {
                             Icon(imageVector = Icons.Rounded.Close, contentDescription = "Close")
                         }
                     }

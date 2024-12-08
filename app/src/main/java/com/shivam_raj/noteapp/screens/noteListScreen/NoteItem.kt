@@ -41,7 +41,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.shivam_raj.noteapp.R
 import com.shivam_raj.noteapp.database.Note
-import com.shivam_raj.noteapp.database.Priority
 import com.shivam_raj.noteapp.getStandardFormattedDate
 import com.shivam_raj.noteapp.screens.noteListScreen.utils.DeleteConfirmationDialog
 import com.shivam_raj.noteapp.ui.theme.colorProviderForNoteBackground
@@ -78,7 +77,7 @@ fun NoteItem(
     val colorFamily = remember {
         colorProviderForNoteBackground(
             isDarkTheme = isSystemInDarkTheme,
-            notePriority = Priority.getValueWithId(note.notePriority),
+            notePriority = note.notePriority,
             noteCustomColorIndex = note.colorIndex
         )
     }

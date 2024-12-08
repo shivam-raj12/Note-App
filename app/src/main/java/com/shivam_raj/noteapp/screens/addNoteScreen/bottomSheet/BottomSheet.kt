@@ -21,7 +21,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -34,7 +33,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomSheet(
-    priority: Int?,
+    priority: Priority?,
     isNewNote:Boolean,
     noteBackgroundColorIndex: Int? = null,
     onSaveClick: (Priority, Int?) -> Unit,
@@ -42,7 +41,7 @@ fun BottomSheet(
     onDismissRequest: () -> Unit,
 ) {
     var selectedPriority by remember {
-        mutableIntStateOf(priority ?: Priority.entries.toTypedArray().random().id)
+        mutableStateOf(priority ?: Priority.entries.toTypedArray().random())
     }
 
     var backgroundColor: Int? by remember {
@@ -112,7 +111,7 @@ fun BottomSheet(
                         onDismissRequest()
                     }
                     onSaveClick(
-                        Priority.getValueWithId(selectedPriority),
+                        selectedPriority,
                         backgroundColor
                     )
                 }
