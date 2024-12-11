@@ -12,8 +12,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shivam_raj.noteapp.database.Note
 import com.shivam_raj.noteapp.database.NoteRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * View model class for [NoteHomeScreen](com.shivam_raj.noteapp.screens.noteListScreen.NoteHomeScreen).
@@ -32,7 +34,9 @@ import kotlinx.coroutines.launch
  * @property addOrUpdateNote Adds or update note to the room database
  * @property deleteNote Deletes the note from room database
  */
-class NoteListScreenViewModel(private val noteRepository: NoteRepository) : ViewModel() {
+@HiltViewModel
+class NoteListScreenViewModel @Inject constructor(private val noteRepository: NoteRepository) :
+    ViewModel() {
 
     val noteList: Flow<List<Note>> = noteRepository.getAllNote()
 
@@ -165,3 +169,4 @@ class NoteListScreenViewModel(private val noteRepository: NoteRepository) : View
         onLockIconClick()
     }
 }
+

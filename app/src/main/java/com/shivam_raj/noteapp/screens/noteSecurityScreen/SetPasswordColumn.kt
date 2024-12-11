@@ -19,7 +19,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,13 +36,13 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.shivam_raj.noteapp.R
 import com.shivam_raj.noteapp.database.NoteRepository
-import com.shivam_raj.noteapp.screens.noteListScreen.noteRepo
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 /**
  * A composable function which only represents the password field in [SetPasswordScreen].
@@ -72,11 +71,7 @@ fun SetPassword(
      *  - It is used to display all the previous password which user have been used for their notes. So that user can select note password among one of them.
      *  @see SetPasswordColumnViewModel
      */
-    val list by viewModel<SetPasswordColumnViewModel>(factory = viewModelFactory {
-        initializer {
-            SetPasswordColumnViewModel(noteRepo().noteRepository)
-        }
-    }).list.collectAsState(initial = listOf())
+    val list by hiltViewModel<SetPasswordColumnViewModel>().list.collectAsStateWithLifecycle(emptyList())
     Column(
         modifier = Modifier
             .background(MaterialTheme.colorScheme.surfaceContainerLow)
@@ -199,6 +194,8 @@ fun SetPassword(
  * Simple viewModel class for the [SetPassword] column,
  * @property list Represents the list of all the password protected notes.
  */
-class SetPasswordColumnViewModel(noteRepository: NoteRepository) : ViewModel() {
+
+@HiltViewModel
+class SetPasswordColumnViewModel @Inject constructor(noteRepository: NoteRepository) : ViewModel() {
     val list = noteRepository.getAllPasswordProtectedNote()
 }

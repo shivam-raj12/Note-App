@@ -11,11 +11,13 @@ import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.shivam_raj.noteapp.navigation.NavigationGraph
 import com.shivam_raj.noteapp.ui.theme.NoteAppTheme
+import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * MainActivity - Entry point of the app
  *  - enableEdgeToEdge() is used to make the status bar transparent.
  */
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()

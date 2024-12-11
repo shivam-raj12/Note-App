@@ -14,17 +14,12 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.CreationExtras
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
-import com.shivam_raj.noteapp.Application
 import com.shivam_raj.noteapp.database.Note
 import com.shivam_raj.noteapp.navigation.Screens
 import com.shivam_raj.noteapp.screens.noteListScreen.utils.ActionModeIconsList
@@ -33,6 +28,7 @@ import com.shivam_raj.noteapp.screens.noteListScreen.utils.EmptyNoteList
 import com.shivam_raj.noteapp.screens.noteListScreen.utils.EmptySearchResult
 import com.shivam_raj.noteapp.screens.noteListScreen.utils.NoteHomeScreenFloatingButton
 import com.shivam_raj.noteapp.screens.noteListScreen.utils.SetPasswordDialog
+import com.shivam_raj.noteapp.screens.noteListScreen.utils.filterByString
 import com.shivam_raj.noteapp.screens.noteListScreen.viewModel.NoteListScreenViewModel
 
 /**
@@ -59,16 +55,10 @@ import com.shivam_raj.noteapp.screens.noteListScreen.viewModel.NoteListScreenVie
  */
 @Composable
 fun NoteHomeScreen(
-    noteListScreenViewModel: NoteListScreenViewModel = viewModel(
-        factory = viewModelFactory {
-            initializer {
-                NoteListScreenViewModel(noteRepo().noteRepository)
-            }
-        }
-    ),
+    noteListScreenViewModel: NoteListScreenViewModel = hiltViewModel(),
     navigator: NavHostController,
-    onNoteClick:(Note)->Unit,
-    clearNote:()-> Unit
+    onNoteClick: (Note) -> Unit,
+    clearNote: () -> Unit
 ) {
     LaunchedEffect(Unit) {
         clearNote()
@@ -87,23 +77,10 @@ fun NoteHomeScreen(
      *  - It will return empty list, if there is no any saved note
      */
     val noteList: List<Note>? =
-        noteListScreenViewModel.noteList.collectAsState(initial = null).value?.filter {
-            if (noteListScreenViewModel.searchBarTextValue.isEmpty()) {
-                true
-            } else if (noteListScreenViewModel.searchBarTextValue.isNotEmpty()) {
-                (((it.fakeTitle ?: it.noteTitle)
-                    .startsWith(
-                        prefix = noteListScreenViewModel.searchBarTextValue,
-                        ignoreCase = true
-                    )) ||
-                        ((it.fakeDescription ?: it.noteDescription).startsWith(
-                            prefix = noteListScreenViewModel.searchBarTextValue,
-                            ignoreCase = true
-                        )))
-            } else {
-                false
-            }
-        }
+        noteListScreenViewModel.noteList.collectAsStateWithLifecycle(initialValue = null).value?.filterByString(
+            noteListScreenViewModel.searchBarTextValue
+        )
+
     Scaffold(
         modifier = Modifier.imePadding(),
         containerColor = MaterialTheme.colorScheme.background,
@@ -218,8 +195,4 @@ fun NoteHomeScreen(
             }
         }
     }
-}
-
-fun CreationExtras.noteRepo(): Application {
-    return (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY]) as Application
 }

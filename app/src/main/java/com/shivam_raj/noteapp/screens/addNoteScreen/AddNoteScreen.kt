@@ -14,6 +14,7 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -25,28 +26,33 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.shivam_raj.noteapp.database.Note
 import com.shivam_raj.noteapp.navigation.Screens
 import com.shivam_raj.noteapp.screens.addNoteScreen.viewModel.AddNoteScreenViewModel
-import com.shivam_raj.noteapp.screens.noteListScreen.noteRepo
 import com.shivam_raj.noteapp.screens.noteSecurityScreen.SecurityData
 
 @Composable
 fun AddNoteScreen(
     navigator: NavHostController,
+    addNoteScreenViewModel: AddNoteScreenViewModel = hiltViewModel(),
     securityData: SecurityData,
     note: Note? = null
 ) {
-    val addNoteScreenViewModel: AddNoteScreenViewModel = viewModel(factory = viewModelFactory {
-        initializer {
-            AddNoteScreenViewModel(noteRepo().noteRepository, note)
-        }
-    })
-    addNoteScreenViewModel.securityData = securityData
+    LaunchedEffect(note) {
+        addNoteScreenViewModel.updateNoteData(note?.noteTitle, note?.noteDescription)
+        addNoteScreenViewModel.updateSecurityData(
+            SecurityData(
+                password = note?.password,
+                fakeTitle = note?.fakeTitle,
+                fakeDescription = note?.fakeDescription
+            )
+        )
+    }
+    LaunchedEffect(securityData) {
+        addNoteScreenViewModel.updateSecurityData(securityData)
+    }
     val focusManager = LocalFocusManager.current
 
     val topBarButtonEnabled by remember {
@@ -73,7 +79,7 @@ fun AddNoteScreen(
                 },
                 colorIndex = note?.colorIndex,
                 onSaveClick = { priority, colorIndex ->
-                    addNoteScreenViewModel.onSaveNoteButtonClick(priority, colorIndex)
+                    addNoteScreenViewModel.onSaveNoteButtonClick(note,priority, colorIndex)
                     navigator.navigateUp()
                 }
             )

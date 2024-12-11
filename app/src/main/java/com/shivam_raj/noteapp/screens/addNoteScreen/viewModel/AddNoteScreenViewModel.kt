@@ -7,21 +7,32 @@ import com.shivam_raj.noteapp.database.Note
 import com.shivam_raj.noteapp.database.NoteRepository
 import com.shivam_raj.noteapp.database.Priority
 import com.shivam_raj.noteapp.screens.noteSecurityScreen.SecurityData
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class AddNoteScreenViewModel(
+@HiltViewModel
+class AddNoteScreenViewModel @Inject constructor(
     private val noteRepository: NoteRepository,
-    private val note: Note?
 ) : ViewModel() {
-    val title = mutableStateOf(note?.noteTitle ?: "")
+    val title = mutableStateOf("")
 
-    val description = mutableStateOf(note?.noteDescription ?: "")
+    val description = mutableStateOf("")
 
-    var securityData = SecurityData(
-        fakeTitle = note?.fakeTitle,
-        fakeDescription = note?.fakeDescription,
-        password = note?.password
-    )
+    val securityData = mutableStateOf(SecurityData())
+
+    fun updateNoteData(title: String?, description: String?){
+        title?.let {
+            this.title.value = title
+        }
+        description?.let {
+            this.description.value = description
+        }
+    }
+
+    fun updateSecurityData(securityData: SecurityData){
+        this.securityData.value = securityData
+    }
 
     fun setTitle(title: String) {
         this.title.value = title
@@ -32,6 +43,7 @@ class AddNoteScreenViewModel(
     }
 
     fun onSaveNoteButtonClick(
+        note: Note?,
         priority: Priority,
         colorIndex: Int?
     ) {
@@ -39,18 +51,18 @@ class AddNoteScreenViewModel(
             noteTitle = title.value,
             noteDescription = description.value,
             notePriority = priority,
-            fakeTitle = securityData.fakeTitle,
-            fakeDescription = securityData.fakeDescription,
-            password = securityData.password,
+            fakeTitle = securityData.value.fakeTitle,
+            fakeDescription = securityData.value.fakeDescription,
+            password = securityData.value.password,
             colorIndex = colorIndex,
             lastUpdate = System.currentTimeMillis()
         ) ?: Note(
             noteTitle = title.value,
             noteDescription = description.value,
             notePriority = priority,
-            fakeTitle = securityData.fakeTitle,
-            fakeDescription = securityData.fakeDescription,
-            password = securityData.password,
+            fakeTitle = securityData.value.fakeTitle,
+            fakeDescription = securityData.value.fakeDescription,
+            password = securityData.value.password,
             colorIndex = colorIndex,
             lastUpdate = System.currentTimeMillis(),
             dateAdded = System.currentTimeMillis()
