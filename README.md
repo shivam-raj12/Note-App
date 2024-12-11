@@ -35,8 +35,8 @@ Welcome to our user-friendly note-taking app designed for simplicity and securit
 You can download the app [here](https://github.com/shivam-raj12/Note_App/blob/master/assests/app/Note%20App.apk).
 
 > [!WARNING]
-> The new version (**2.0.0**) of the app is **not compatible** with older versions.
+> The new version (**2.0.0 or later**) of the app is **not compatible** with older versions.
 > 
 > To avoid issues, it is **highly recommended** to:
 > 1. **Uninstall any previous versions** of the app before installing the new version.  
-> 2. Then, proceed with installing version **2.0.0**.
+> 2. Then, proceed with installing version **2.0.0 or later**.
