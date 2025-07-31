@@ -30,6 +30,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.shivam_raj.noteapp.R
 
@@ -173,4 +174,16 @@ fun ActionMode(
             content = content
         )
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun TopBarPreview() {
+    NoteListTopBar(
+        actionModeText = "1",
+        value = "",
+        onValueChange = {},
+        onClearFilterClicked = {},
+        onCloseActionModeClick = {}
+    ) { }
 }

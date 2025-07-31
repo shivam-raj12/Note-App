@@ -9,12 +9,12 @@ plugins {
 
 android {
     namespace = "com.shivam_raj.noteapp"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.shivam_raj.noteapp"
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 3
         versionName = "2.0.1"
 
@@ -42,9 +42,6 @@ android {
     }
     buildFeatures {
         compose = true
-    }
-    composeCompiler {
-        enableStrongSkippingMode = true
     }
     packaging {
         resources {

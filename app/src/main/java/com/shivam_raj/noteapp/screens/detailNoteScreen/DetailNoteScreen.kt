@@ -1,5 +1,6 @@
 package com.shivam_raj.noteapp.screens.detailNoteScreen
 
+import android.content.ClipData
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -34,18 +35,16 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.ClipEntry
+import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.shivam_raj.noteapp.R
@@ -53,6 +52,7 @@ import com.shivam_raj.noteapp.database.Note
 import com.shivam_raj.noteapp.getSimpleFormattedDate
 import com.shivam_raj.noteapp.navigation.Screens
 import com.shivam_raj.noteapp.ui.theme.colorProviderForNoteBackground
+import kotlinx.coroutines.launch
 
 /**
  * This screen will show the selected note in detail.
@@ -72,7 +72,8 @@ fun DetailNoteScreen(
         notePriority = note.notePriority,
         noteCustomColorIndex = note.colorIndex
     )
-    val clipboardManager = LocalClipboardManager.current
+    val clipboardManager = LocalClipboard.current
+    val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
     var isScrolled by remember {
         mutableStateOf(false)
@@ -121,21 +122,16 @@ fun DetailNoteScreen(
                 },
                 actions = {
                     IconButton(onClick = {
-                        clipboardManager.setText(
-                            buildAnnotatedString {
-                                withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
-                                    append("Title: ")
-                                }
-                                append(note.noteTitle)
-                                withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
-                                    append("\nDescription: ")
-                                }
-                                append(note.noteDescription)
-                                withStyle(SpanStyle(fontWeight = FontWeight.Light)) {
-                                    append("\nCreated at ${getSimpleFormattedDate(note.dateAdded)}")
-                                }
-                            }
-                        )
+                        coroutineScope.launch {
+                            clipboardManager.setClipEntry(
+                                ClipEntry(
+                                    ClipData.newPlainText(
+                                        "Note",
+                                        "Title: ${note.noteTitle}\nDescription: ${note.noteDescription}"
+                                    )
+                                )
+                            )
+                        }
                         Toast.makeText(context, "Note copied", Toast.LENGTH_SHORT).show()
                     }) {
                         Icon(

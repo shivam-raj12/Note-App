@@ -75,7 +75,6 @@ fun colorProviderForNoteBackground(
             Priority.HIGH -> if (isDarkTheme) extendedDark.highPriorityNoteColor else extendedLight.highPriorityNoteColor
             Priority.MEDIUM -> if (isDarkTheme) extendedDark.mediumPriorityNoteColor else extendedLight.mediumPriorityNoteColor
             Priority.LOW -> if (isDarkTheme) extendedDark.lowPriorityNoteColor else extendedLight.lowPriorityNoteColor
-            Priority.VERY_LOW -> if (isDarkTheme) extendedDark.veryLowPriorityNoteColor else extendedLight.veryLowPriorityNoteColor
             Priority.NONE -> if (!isDarkTheme){
                 ColorFamily(backgroundLightMediumContrast, onBackgroundLightMediumContrast, surfaceVariantLightMediumContrast, onSurfaceVariantLightMediumContrast)
             } else{
