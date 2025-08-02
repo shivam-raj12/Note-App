@@ -1,9 +1,7 @@
 package com.shivam_raj.noteapp.screens.noteListScreen
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
@@ -16,7 +14,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
@@ -40,11 +37,6 @@ fun NoteHomeScreen(
 ) {
     LaunchedEffect(Unit) {
         clearNote()
-    }
-    BackHandler(
-        enabled = noteListScreenViewModel.isSelectionModeActive
-    ) {
-        noteListScreenViewModel.reverseSelectionMode()
     }
 
     val navigateToAddNoteScreen: () -> Unit = { navigator.navigate(Screens.AddNoteScreen.route) }
@@ -81,9 +73,6 @@ fun NoteHomeScreen(
                 if ((noteList.isNotEmpty()) || (noteListScreenViewModel.searchBarTextValue.isNotEmpty())) {
                     CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onBackground) {
                         NoteListTopBar(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(8.dp),
                             actionModeText = noteListScreenViewModel.selectedNotes.size.toString(),
                             value = noteListScreenViewModel.searchBarTextValue,
                             onValueChange = noteListScreenViewModel::updateSearchBarText,

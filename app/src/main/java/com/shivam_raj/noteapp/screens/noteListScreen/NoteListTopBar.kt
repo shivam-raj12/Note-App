@@ -1,5 +1,6 @@
 package com.shivam_raj.noteapp.screens.noteListScreen
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -54,7 +55,6 @@ enum class TopBarState {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NoteListTopBar(
-    modifier: Modifier = Modifier,
     actionModeText: String,
     value: String,
     onValueChange: (String) -> Unit,
@@ -70,6 +70,13 @@ fun NoteListTopBar(
         mutableStateOf(if (showAction) TopBarState.ACTION_MODE else TopBarState.NORMAL)
     }
 
+    BackHandler(
+        enabled = topBarState == TopBarState.SEARCH || topBarState == TopBarState.ACTION_MODE
+    ) {
+        onClearFilterClicked()
+        if (topBarState == TopBarState.ACTION_MODE) onCloseActionModeClick()
+        topBarState = TopBarState.NORMAL
+    }
     LaunchedEffect(topBarState) {
         if (topBarState == TopBarState.SEARCH) {
             focusRequester.requestFocus()
