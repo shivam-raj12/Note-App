@@ -31,28 +31,6 @@ import com.shivam_raj.noteapp.screens.noteListScreen.utils.SetPasswordDialog
 import com.shivam_raj.noteapp.screens.noteListScreen.utils.filterByString
 import com.shivam_raj.noteapp.screens.noteListScreen.viewModel.NoteListScreenViewModel
 
-/**
- * A composable destination function and also a starting destination for the app.
- *
- * This app calls various other composable function depends on if the user saved any note or not. Below are the conditions:
- *
- *  - If the note list returns null, it means the device is still loading the saved data from the room database. In this case a CircularProgressBar is shown.
- *  - If the note list is an empty list, it means the user haven't saved any notes yet. In this case [EmptyNoteList] composable is shown.
- *  - If the note list is not empty, it means the user have some saved notes. In this case all the notes with [NoteList] composable is shown.
- *
- * The top bar of this composable [NoteListTopBar] contains a search field. This search field also creates two possibilities:
- *  - If the search field is empty, it means the user haven't searched for any note. In this case we are showing all the saved notes of the user.
- *  - If the search field is not empty, it means the user have searched for any specific note. In this case we filer our list in following ways:
- *      - We filter our noteList with those notes whose title or description starts with the value of search field.
- *      - If the note contains fake title, then we ignores the original note's title and filter noteList with those notes whose fake title matches search field value.
- *      - If the note contains fake description, then we ignores the original note's description and filter noteList with those notes whose fake description matches search field value.
- *          - Reason for searching in fake title or fake description instead of original title and description is that if note contains fake title and fake description, we don't show the original title and description on the homeScreen. We only show original title and description only on DetailNoteScreen.
- *  - If the list of filtered note is empty then we show [EmptySearchResult] composable function.
- *
- *  This composable function also shows two dialogBox: [DeleteConfirmationDialog] and [SetPasswordDialog] . These dialog box are shown when the delete icon or set password icon of [NoteListTopBar] are clicked in actionMode respectively.
- * @param noteListScreenViewModel ViewModel for this composable function.
- * @see NoteListScreenViewModel
- */
 @Composable
 fun NoteHomeScreen(
     noteListScreenViewModel: NoteListScreenViewModel = hiltViewModel(),
